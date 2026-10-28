@@ -1,5 +1,5 @@
 # --- Stage 1: Build the binary ---
-FROM golang:1.23-alpine AS builder
+FROM golang:1.25 AS builder
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -25,6 +25,8 @@ WORKDIR /app
 
 # Copy only the compiled binary from the builder stage
 COPY --from=builder /app/main .
+
+COPY --from=builder /app/views ./views
 
 # Expose the port your application listens on
 EXPOSE 8080

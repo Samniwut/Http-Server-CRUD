@@ -2,10 +2,12 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	"time"
 
 	"github.com/gofiber/fiber/v2"
+	jwtware "github.com/gofiber/jwt"
 	"github.com/gofiber/template/html/v2"
 )
 
@@ -39,6 +41,12 @@ func main() {
 	app.Post("/login", login)
 
 	app.Use(checkMiddleware)
+
+	// JWTMiddleware
+	app.Use(jwtware.New(jwtware.Config{
+		SigningKey: []byte(os.Getenv("JWT_SECRET")),
+	}))
+
 	app.Get("/books", getBooks)
 	app.Get("/books/:id", getBook)
 	app.Post("/books", createBook)
